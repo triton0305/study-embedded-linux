@@ -11,6 +11,12 @@
 #define BUF_SIZE 100
 #define MAX_CLNT 256
 
+typedef struct
+{
+  int client;
+  struct sockaddr_in client_addr;
+}Data;
+
 
 void *thread_main(void *arg);
 
@@ -21,8 +27,14 @@ int main(int argc, char* argv[])
     printf("Usage : ./server <port>\n");
     return 1;
   }
+  
+  Data data;
+  data.client = 5;
+  data.client_addr = client_addr;
+
+
   pthread_t tid;
-  pthread_create(&tid, NULL, thread_main, NULL);
+  pthread_create(&tid, NULL, thread_main, &data);
 
   pthread_join(tid, NULL);
 
@@ -33,7 +45,10 @@ int main(int argc, char* argv[])
 
 void *thread_main(void *arg)
 {
-  (void)arg;
-  printf("Hello Thread\n");
+  Data *pdata = (Data *)arg;
+
+  printf("%d\n", pdata->client);
+  
+  free(pdata);
   return NULL;
 }
