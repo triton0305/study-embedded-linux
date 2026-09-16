@@ -20,20 +20,14 @@ typedef struct
 
 void *thread_main(void *arg);
 
-int main(int argc, char* argv[])
+int main(void)
 {
-  if(argc != 2)
-  {
-    printf("Usage : ./server <port>\n");
-    return 1;
-  }
-  
-  Data data;
-  data.client = 5;
-  data.client_addr = client_addr;
-
-
   pthread_t tid;
+
+  Data data;
+  
+  data.client = 5;
+
   pthread_create(&tid, NULL, thread_main, &data);
 
   pthread_join(tid, NULL);
@@ -47,8 +41,7 @@ void *thread_main(void *arg)
 {
   Data *pdata = (Data *)arg;
 
-  printf("%d\n", pdata->client);
-  
-  free(pdata);
+  printf("[THREAD] client fd = %d\n", pdata->client);
+
   return NULL;
 }
